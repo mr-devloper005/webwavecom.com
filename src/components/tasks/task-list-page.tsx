@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowRight, Building2, FileText, Image as ImageIcon, LayoutGrid, Tag, User } from 'lucide-react'
+import { ArrowRight, Building2, FileText, Image as ImageIcon, LayoutGrid, Plus, Search, Tag, User } from 'lucide-react'
 import { NavbarShell } from '@/components/shared/navbar-shell'
 import { Footer } from '@/components/shared/footer'
 import { TaskListClient } from '@/components/tasks/task-list-client'
@@ -28,7 +28,7 @@ const variantShells = {
   'listing-directory': 'bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.08),transparent_24%),linear-gradient(180deg,#f8fbff_0%,#ffffff_100%)]',
   'listing-showcase': 'bg-[linear-gradient(180deg,#ffffff_0%,#f4f9ff_100%)]',
   'article-editorial': 'bg-[radial-gradient(circle_at_top_left,rgba(251,191,36,0.08),transparent_20%),linear-gradient(180deg,#fff8ef_0%,#ffffff_100%)]',
-  'article-journal': 'bg-[linear-gradient(180deg,#fffdf9_0%,#f7f1ea_100%)]',
+  'article-journal': 'bg-[linear-gradient(180deg,#fbfcff_0%,#f4f6fb_100%)]',
   'image-masonry': 'bg-[linear-gradient(180deg,#09101d_0%,#111c2f_100%)] text-white',
   'image-portfolio': 'bg-[linear-gradient(180deg,#07111f_0%,#13203a_100%)] text-white',
   'profile-creator': 'bg-[linear-gradient(180deg,#0a1120_0%,#101c34_100%)] text-white',
@@ -59,6 +59,7 @@ export async function TaskListPage({ task, category }: { task: TaskKey; category
   const layoutKey = recipe.taskLayouts[task as keyof typeof recipe.taskLayouts] || `${task}-${task === 'listing' ? 'directory' : 'editorial'}`
   const shellClass = variantShells[layoutKey as keyof typeof variantShells] || 'bg-background'
   const Icon = taskIcons[task] || LayoutGrid
+  const isArticleReadingLayout = layoutKey === 'article-editorial' || layoutKey === 'article-journal'
 
   const isDark = ['image-masonry', 'image-portfolio', 'profile-creator'].includes(layoutKey)
   const ui = isDark
@@ -71,11 +72,11 @@ export async function TaskListPage({ task, category }: { task: TaskKey; category
       }
     : layoutKey.startsWith('article') || layoutKey.startsWith('sbm')
       ? {
-          muted: 'text-[#72594a]',
-          panel: 'border border-[#dbc6b6] bg-white/90',
-          soft: 'border border-[#dbc6b6] bg-[#fff8ef]',
-          input: 'border border-[#dbc6b6] bg-white text-[#2f1d16]',
-          button: 'bg-[#2f1d16] text-[#fff4e4] hover:bg-[#452920]',
+          muted: 'text-slate-600',
+          panel: 'border border-slate-200/90 bg-white shadow-[var(--shadow-soft)]',
+          soft: 'border border-slate-200/80 bg-white/90',
+          input: 'border border-slate-200 bg-slate-50/80 text-slate-900',
+          button: 'bg-slate-900 text-white hover:bg-slate-800',
         }
       : {
           muted: 'text-slate-600',
@@ -147,24 +148,78 @@ export async function TaskListPage({ task, category }: { task: TaskKey; category
         ) : null}
 
         {layoutKey === 'article-editorial' || layoutKey === 'article-journal' ? (
-          <section className="mb-12 grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
-            <div>
-              <p className={`text-xs uppercase tracking-[0.3em] ${ui.muted}`}>{taskConfig?.label || task}</p>
-              <h1 className="mt-3 max-w-4xl text-5xl font-semibold tracking-[-0.05em] text-foreground">{taskConfig?.description || 'Latest posts'}</h1>
-              <p className={`mt-5 max-w-2xl text-sm leading-8 ${ui.muted}`}>This reading surface uses slower pacing, stronger typographic hierarchy, and more breathing room so long-form content feels intentional rather than squeezed into a generic feed.</p>
+          <section className="mb-14 space-y-10">
+            <div className="flex flex-col items-center gap-6 lg:flex-row lg:items-start lg:justify-between">
+              <div className="max-w-3xl text-center lg:text-left">
+                <p className={`text-xs font-semibold uppercase tracking-[0.28em] ${ui.muted}`}>{taskConfig?.label || task}</p>
+                <h1 className="mt-4 text-4xl font-semibold tracking-[-0.04em] text-slate-950 sm:text-5xl">
+                  {taskConfig?.description || 'Latest articles'}
+                </h1>
+                <p className={`mt-4 max-w-2xl text-sm leading-relaxed sm:text-base lg:mx-0 mx-auto ${ui.muted}`}>
+                  Browse the archive with filters on the left and a responsive card grid tuned for scanning titles, topics, and excerpts.
+                </p>
+              </div>
+              {task === 'article' ? (
+                <Link
+                  href="/create/article"
+                  className="inline-flex shrink-0 items-center gap-2 rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-slate-800"
+                >
+                  <Plus className="h-4 w-4" aria-hidden />
+                  New article
+                </Link>
+              ) : null}
             </div>
-            <div className={`rounded-[2rem] p-6 ${ui.panel}`}>
-              <p className={`text-xs font-semibold uppercase tracking-[0.24em] ${ui.muted}`}>Reading note</p>
-              <p className={`mt-4 text-sm leading-7 ${ui.muted}`}>Use category filters to jump between topics without collapsing the page into the same repeated card rhythm used by other task types.</p>
-              <form className="mt-5 flex items-center gap-3" action={taskConfig?.route || '#'}>
-                <select name="category" defaultValue={normalizedCategory} className={`h-11 flex-1 rounded-xl px-3 text-sm ${ui.input}`}>
-                  <option value="all">All categories</option>
-                  {CATEGORY_OPTIONS.map((item) => (
-                    <option key={item.slug} value={item.slug}>{item.name}</option>
-                  ))}
-                </select>
-                <button type="submit" className={`h-11 rounded-xl px-4 text-sm font-medium ${ui.button}`}>Apply</button>
-              </form>
+
+            <div className="grid gap-10 lg:grid-cols-[minmax(0,260px)_1fr] lg:items-start">
+              <aside className="space-y-4 lg:sticky lg:top-28 lg:self-start">
+                <Link
+                  href="/search"
+                  className="journal-card flex items-center gap-3 px-4 py-3.5 text-sm font-medium text-slate-600 transition hover:text-slate-900"
+                >
+                  <Search className="h-4 w-4 shrink-0 text-indigo-500" aria-hidden />
+                  <span className="truncate">Search articles…</span>
+                </Link>
+                <div className={`journal-card space-y-3 p-4 ${ui.soft}`}>
+                  <p className={`text-xs font-semibold uppercase tracking-[0.2em] ${ui.muted}`}>Filter by topic</p>
+                  <form className="grid gap-3" action={taskConfig?.route || '#'} method="get">
+                    <select
+                      name="category"
+                      defaultValue={normalizedCategory}
+                      className={`h-11 w-full rounded-xl px-3 text-sm ${ui.input}`}
+                    >
+                      <option value="all">All categories</option>
+                      {CATEGORY_OPTIONS.map((item) => (
+                        <option key={item.slug} value={item.slug}>
+                          {item.name}
+                        </option>
+                      ))}
+                    </select>
+                    <button type="submit" className={`h-11 w-full rounded-xl text-sm font-semibold ${ui.button}`}>
+                      Apply filter
+                    </button>
+                  </form>
+                </div>
+              </aside>
+              <div className="min-w-0 space-y-10">
+                {intro ? (
+                  <div className={`journal-card p-6 sm:p-8 ${ui.panel}`}>
+                    <h2 className="text-xl font-semibold text-foreground">{intro.title}</h2>
+                    {intro.paragraphs.map((paragraph) => (
+                      <p key={paragraph.slice(0, 40)} className={`mt-4 text-sm leading-7 ${ui.muted}`}>
+                        {paragraph}
+                      </p>
+                    ))}
+                    <div className="mt-4 flex flex-wrap gap-4 text-sm">
+                      {intro.links.map((link) => (
+                        <a key={link.href} href={link.href} className="font-semibold text-indigo-600 hover:text-indigo-700">
+                          {link.label}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+                <TaskListClient task={task} initialPosts={posts} category={normalizedCategory} />
+              </div>
             </div>
           </section>
         ) : null}
@@ -237,21 +292,24 @@ export async function TaskListPage({ task, category }: { task: TaskKey; category
           </section>
         ) : null}
 
-        {intro ? (
-          <section className={`mb-12 rounded-[2rem] p-6 shadow-[0_18px_50px_rgba(15,23,42,0.06)] sm:p-8 ${ui.panel}`}>
-            <h2 className="text-2xl font-semibold text-foreground">{intro.title}</h2>
-            {intro.paragraphs.map((paragraph) => (
-              <p key={paragraph.slice(0, 40)} className={`mt-4 text-sm leading-7 ${ui.muted}`}>{paragraph}</p>
-            ))}
-            <div className="mt-4 flex flex-wrap gap-4 text-sm">
-              {intro.links.map((link) => (
-                <a key={link.href} href={link.href} className="font-semibold text-foreground hover:underline">{link.label}</a>
-              ))}
-            </div>
-          </section>
+        {!isArticleReadingLayout ? (
+          <>
+            {intro ? (
+              <section className={`mb-12 rounded-[2rem] p-6 shadow-[0_18px_50px_rgba(15,23,42,0.06)] sm:p-8 ${ui.panel}`}>
+                <h2 className="text-2xl font-semibold text-foreground">{intro.title}</h2>
+                {intro.paragraphs.map((paragraph) => (
+                  <p key={paragraph.slice(0, 40)} className={`mt-4 text-sm leading-7 ${ui.muted}`}>{paragraph}</p>
+                ))}
+                <div className="mt-4 flex flex-wrap gap-4 text-sm">
+                  {intro.links.map((link) => (
+                    <a key={link.href} href={link.href} className="font-semibold text-foreground hover:underline">{link.label}</a>
+                  ))}
+                </div>
+              </section>
+            ) : null}
+            <TaskListClient task={task} initialPosts={posts} category={normalizedCategory} />
+          </>
         ) : null}
-
-        <TaskListClient task={task} initialPosts={posts} category={normalizedCategory} />
       </main>
       <Footer />
     </div>

@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Search, Menu, X, User, FileText, Building2, LayoutGrid, Tag, Image as ImageIcon, ChevronRight, Sparkles, MapPin, Plus } from 'lucide-react'
+import { Search, Menu, X, User, FileText, Building2, LayoutGrid, Tag, Image as ImageIcon, ChevronRight, Sparkles, MapPin, Plus, ArrowUpRight, Home } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/lib/auth-context'
 import { SITE_CONFIG, type TaskKey } from '@/lib/site-config'
@@ -41,12 +41,12 @@ const variantClasses = {
     mobile: 'border-t border-slate-200/70 bg-white/95',
   },
   'editorial-bar': {
-    shell: 'border-b border-[#d7c4b3] bg-[#fff7ee]/90 text-[#2f1d16] backdrop-blur-xl',
-    logo: 'rounded-full border border-[#dbc6b6] bg-white shadow-sm',
-    active: 'bg-[#2f1d16] text-[#fff4e4]',
-    idle: 'text-[#72594a] hover:bg-[#f2e5d4] hover:text-[#2f1d16]',
-    cta: 'rounded-full bg-[#2f1d16] text-[#fff4e4] hover:bg-[#452920]',
-    mobile: 'border-t border-[#dbc6b6] bg-[#fff7ee]',
+    shell: 'border-b border-slate-200/80 bg-white/85 text-slate-900 shadow-[0_1px_0_rgba(15,23,42,0.04)] backdrop-blur-xl',
+    logo: 'rounded-[14px] border border-slate-200/90 bg-white shadow-[var(--shadow-soft)]',
+    active: 'bg-slate-900 text-white shadow-sm',
+    idle: 'text-slate-600 hover:bg-slate-100 hover:text-slate-900',
+    cta: 'rounded-full bg-slate-900 text-white shadow-md hover:bg-slate-800',
+    mobile: 'border-t border-slate-200/80 bg-white/95',
   },
   'floating-bar': {
     shell: 'border-b border-transparent bg-transparent text-white',
@@ -220,17 +220,28 @@ export function Navbar() {
           </Link>
 
           {isEditorial ? (
-            <div className="hidden min-w-0 flex-1 items-center gap-4 xl:flex">
-              <div className="h-px flex-1 bg-[#d8c8bb]" />
-              {primaryNavigation.map((task) => {
-                const isActive = pathname.startsWith(task.route)
+            <div className="hidden min-w-0 flex-1 items-center justify-center gap-1 xl:flex">
+              {[
+                { href: '/', label: 'Home' },
+                ...primaryNavigation.map((task) => ({ href: task.route, label: task.label })),
+                { href: '/about', label: 'About' },
+                { href: '/blog', label: 'Blog' },
+                { href: '/search', label: 'Search' },
+              ].map((item) => {
+                const isActive = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href)
                 return (
-                  <Link key={task.key} href={task.route} className={cn('text-sm font-semibold uppercase tracking-[0.18em] transition-colors', isActive ? 'text-[#2f1d16]' : 'text-[#7b6254] hover:text-[#2f1d16]')}>
-                    {task.label}
+                  <Link
+                    key={`${item.href}-${item.label}`}
+                    href={item.href}
+                    className={cn(
+                      'rounded-full px-3 py-2 text-sm font-semibold transition-colors',
+                      isActive ? style.active : style.idle,
+                    )}
+                  >
+                    {item.label}
                   </Link>
                 )
               })}
-              <div className="h-px flex-1 bg-[#d8c8bb]" />
             </div>
           ) : isFloating ? (
             <div className="hidden min-w-0 flex-1 items-center gap-2 xl:flex">
@@ -295,7 +306,10 @@ export function Navbar() {
                 <Link href="/login">Sign In</Link>
               </Button>
               <Button size="sm" asChild className={style.cta}>
-                <Link href="/register">{isEditorial ? 'Subscribe' : isUtility ? 'Post Now' : 'Get Started'}</Link>
+                <Link href="/register" className="inline-flex items-center gap-1.5">
+                  {isEditorial ? 'Get started' : isUtility ? 'Post Now' : 'Get Started'}
+                  <ArrowUpRight className="h-4 w-4 opacity-90" />
+                </Link>
               </Button>
             </div>
           )}
@@ -321,17 +335,35 @@ export function Navbar() {
           <div className="space-y-2 px-4 py-4">
             <Link href="/search" onClick={() => setIsMobileMenuOpen(false)} className="mb-3 flex items-center gap-3 rounded-2xl border border-border bg-card px-4 py-3 text-sm font-semibold text-muted-foreground">
               <Search className="h-4 w-4" />
-              Search the site
+              Search articles
             </Link>
-            {mobileNavigation.map((item) => {
-              const isActive = pathname.startsWith(item.href)
-              return (
-                <Link key={item.name} href={item.href} onClick={() => setIsMobileMenuOpen(false)} className={cn('flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold transition-colors', isActive ? style.active : style.idle)}>
-                  <item.icon className="h-5 w-5" />
-                  {item.name}
-                </Link>
-              )
-            })}
+            {isEditorial
+              ? [
+                  { name: 'Home', href: '/', icon: Home },
+                  ...mobileNavigation,
+                  { name: 'About', href: '/about', icon: User },
+                  { name: 'Blog', href: '/blog', icon: FileText },
+                ].map((item) => {
+                  const isActive = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href)
+                  return (
+                    <Link key={item.name} href={item.href} onClick={() => setIsMobileMenuOpen(false)} className={cn('flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold transition-colors', isActive ? style.active : style.idle)}>
+                      <item.icon className="h-5 w-5" />
+                      {item.name}
+                    </Link>
+                  )
+                })
+              : null}
+            {!isEditorial
+              ? mobileNavigation.map((item) => {
+                  const isActive = pathname.startsWith(item.href)
+                  return (
+                    <Link key={item.name} href={item.href} onClick={() => setIsMobileMenuOpen(false)} className={cn('flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold transition-colors', isActive ? style.active : style.idle)}>
+                      <item.icon className="h-5 w-5" />
+                      {item.name}
+                    </Link>
+                  )
+                })
+              : null}
           </div>
         </div>
       )}
