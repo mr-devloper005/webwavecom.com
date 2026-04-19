@@ -1,6 +1,6 @@
 import { ContentImage } from '@/components/shared/content-image'
 import Link from 'next/link'
-import { ArrowUpRight, ExternalLink, FileText, Mail, MapPin, Tag } from 'lucide-react'
+import { ArrowUpRight, Clock, ExternalLink, FileText, Mail, MapPin, Tag } from 'lucide-react'
 import type { SitePost } from '@/lib/site-connector'
 import { CATEGORY_OPTIONS, normalizeCategory } from '@/lib/categories'
 import type { TaskKey } from '@/lib/site-config'
@@ -62,10 +62,10 @@ const cardStyles = {
     badge: 'bg-slate-950 text-white',
   },
   'editorial-feature': {
-    frame: 'rounded-[1.8rem] border border-[rgba(125,83,45,0.12)] bg-[#fffaf3] shadow-[0_18px_55px_rgba(89,52,24,0.1)] hover:-translate-y-1 hover:shadow-[0_26px_75px_rgba(89,52,24,0.14)]',
-    muted: 'text-[#71584b]',
-    title: 'text-[#2b1d17]',
-    badge: 'bg-[#2b1d17] text-[#fff3df]',
+    frame: 'journal-card flex h-full flex-col overflow-hidden bg-white/95',
+    muted: 'text-slate-600',
+    title: 'text-slate-950',
+    badge: 'text-[11px] font-semibold uppercase tracking-[0.16em] text-indigo-600',
   },
   'studio-panel': {
     frame: 'rounded-[1.9rem] border border-white/10 bg-[linear-gradient(180deg,rgba(7,17,31,0.96),rgba(12,23,43,0.96))] text-white shadow-[0_24px_80px_rgba(15,23,42,0.35)] hover:-translate-y-1 hover:shadow-[0_30px_90px_rgba(15,23,42,0.42)]',
@@ -169,7 +169,7 @@ export function TaskPostCard({
         </div>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] ${visualVariant.badge}`}>
+            <span className="inline-flex items-center gap-1 rounded-full bg-slate-900 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white">
               <Tag className="h-3.5 w-3.5" />
               {category}
             </span>
@@ -183,9 +183,53 @@ export function TaskPostCard({
     )
   }
 
+  if (variant === 'article') {
+    const readMinutes = Math.max(3, Math.min(16, Math.round((getExcerpt(content.description || post.summary, 400) || '').length / 55)))
+    return (
+      <Link href={href} className={`group flex h-full flex-col overflow-hidden ${visualVariant.frame}`}>
+        <div className={`relative ${imageAspect} overflow-hidden bg-slate-100`}>
+          <ContentImage
+            src={image}
+            alt={altText}
+            fill
+            sizes={imageSizes}
+            quality={75}
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+            intrinsicWidth={960}
+            intrinsicHeight={720}
+          />
+        </div>
+        <div className={`flex flex-1 flex-col p-5 sm:p-6 ${compact ? 'py-4' : ''}`}>
+          <p className={visualVariant.badge}>{category}</p>
+          <h3 className={`mt-2 line-clamp-2 text-lg font-semibold leading-snug sm:text-[1.2rem] ${visualVariant.title}`}>{post.title}</h3>
+          <p className={`mt-3 line-clamp-3 text-sm leading-7 ${visualVariant.muted}`}>
+            {getExcerpt(content.description || post.summary) || 'Open the story for the full narrative and practical notes.'}
+          </p>
+          <div className="mt-auto flex items-center justify-between gap-3 border-t border-slate-100/90 pt-4">
+            <div className="flex min-w-0 items-center gap-2 text-xs text-slate-600">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-200 text-[10px] font-bold text-slate-700">
+                {(post.authorName || 'Ed').slice(0, 2).toUpperCase()}
+              </span>
+              <div className="min-w-0">
+                <p className="truncate font-semibold text-slate-900">{post.authorName || 'Editorial'}</p>
+                <p className="flex items-center gap-1 text-[11px] text-slate-500">
+                  <Clock className="h-3 w-3" aria-hidden />
+                  {readMinutes} min read
+                </p>
+              </div>
+            </div>
+            <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition group-hover:border-indigo-200 group-hover:text-indigo-600">
+              <ArrowUpRight className="h-4 w-4" aria-hidden />
+            </span>
+          </div>
+        </div>
+      </Link>
+    )
+  }
+
   return (
     <Link href={href} className={`group flex h-full flex-col overflow-hidden transition duration-300 ${visualVariant.frame}`}>
-      <div className={`relative ${imageAspect} overflow-hidden bg-[#ede2dc]`}>
+      <div className={`relative ${imageAspect} overflow-hidden bg-slate-100`}>
         <ContentImage src={image} alt={altText} fill sizes={imageSizes} quality={75} className="object-cover transition-transform duration-500 group-hover:scale-[1.04]" intrinsicWidth={960} intrinsicHeight={720} />
         <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent opacity-80" />
         <span className={`absolute left-4 top-4 inline-flex items-center gap-1 rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] ${visualVariant.badge}`}>
@@ -195,8 +239,8 @@ export function TaskPostCard({
         {variant === 'pdf' && <span className="absolute right-4 top-4 inline-flex items-center gap-1 rounded-full bg-white/88 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-950 shadow"><FileText className="h-3.5 w-3.5" />PDF</span>}
       </div>
       <div className={`flex flex-1 flex-col p-5 ${compact ? 'py-4' : ''}`}>
-        <h3 className={`line-clamp-2 font-semibold leading-snug ${variant === 'article' ? 'text-[1.35rem]' : 'text-lg'} ${visualVariant.title}`}>{post.title}</h3>
-        <p className={`mt-3 text-sm leading-7 ${variant === 'article' ? 'line-clamp-4' : 'line-clamp-3'} ${visualVariant.muted}`}>{getExcerpt(content.description || post.summary) || 'Explore this post.'}</p>
+        <h3 className={`line-clamp-2 text-lg font-semibold leading-snug ${visualVariant.title}`}>{post.title}</h3>
+        <p className={`mt-3 line-clamp-3 text-sm leading-7 ${visualVariant.muted}`}>{getExcerpt(content.description || post.summary) || 'Explore this post.'}</p>
         <div className="mt-auto pt-4">
           {content.location && <div className={`inline-flex items-center gap-1 text-xs ${visualVariant.muted}`}><MapPin className="h-3.5 w-3.5" />{content.location}</div>}
           {content.email && <div className={`mt-2 inline-flex items-center gap-1 text-xs ${visualVariant.muted}`}><Mail className="h-3.5 w-3.5" />{content.email}</div>}
