@@ -148,73 +148,146 @@ export async function TaskListPage({ task, category }: { task: TaskKey; category
         ) : null}
 
         {layoutKey === 'article-editorial' || layoutKey === 'article-journal' ? (
-          <section className="mb-14 space-y-10">
-            <div className="flex flex-col items-center gap-6 lg:flex-row lg:items-start lg:justify-between">
-              <div className="max-w-3xl text-center lg:text-left">
-                <p className={`text-xs font-semibold uppercase tracking-[0.28em] ${ui.muted}`}>{taskConfig?.label || task}</p>
-                <h1 className="mt-4 text-4xl font-semibold tracking-[-0.04em] text-slate-950 sm:text-5xl">
-                  {taskConfig?.description || 'Latest articles'}
-                </h1>
-                <p className={`mt-4 max-w-2xl text-sm leading-relaxed sm:text-base lg:mx-0 mx-auto ${ui.muted}`}>
-                  Browse the archive with filters on the left and a responsive card grid tuned for scanning titles, topics, and excerpts.
-                </p>
+          <section className="mb-14 space-y-12">
+            <div className="relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 via-transparent to-emerald-500/5"></div>
+              <div className="relative z-10">
+                <div className="flex flex-col items-center gap-8 lg:flex-row lg:items-start lg:justify-between">
+                  <div className="max-w-4xl text-center lg:text-left">
+                    <div className="inline-flex items-center gap-2 rounded-full border border-violet-200/60 bg-violet-50/80 px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-violet-700 backdrop-blur-sm">
+                      <div className="h-2 w-2 rounded-full bg-violet-500 animate-pulse"></div>
+                      {taskConfig?.label || task}
+                    </div>
+                    <h1 className="mt-6 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 bg-clip-text text-4xl font-bold text-transparent sm:text-6xl font-bungee">
+                      {taskConfig?.description || 'Latest articles'}
+                    </h1>
+                    <p className={`mt-6 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg lg:mx-0 mx-auto`}>
+                      Discover stories that inspire, inform, and transform. Our curated collection brings you the best insights from industry leaders and creative minds.
+                    </p>
+                    <div className="mt-8 flex flex-wrap gap-3 lg:justify-start justify-center">
+                      <div className="flex items-center gap-2 rounded-full bg-gradient-to-r from-violet-500 to-emerald-500 px-4 py-2 text-white text-sm font-medium">
+                        <div className="h-1.5 w-1.5 rounded-full bg-white animate-pulse"></div>
+                        Live Updates
+                      </div>
+                      <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-slate-600 text-sm font-medium">
+                        <span className="text-slate-400">•</span>
+                        {posts.length} Articles
+                      </div>
+                    </div>
+                  </div>
+                  {task === 'article' ? (
+                    <div className="relative group">
+                      <div className="absolute -inset-1 bg-gradient-to-r from-violet-600 to-emerald-600 rounded-full blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
+                      <Link
+                        href="/create/article"
+                        className="relative inline-flex shrink-0 items-center gap-2 rounded-full bg-gradient-to-r from-violet-600 to-emerald-600 px-6 py-3.5 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-105"
+                      >
+                        <Plus className="h-4 w-4" aria-hidden />
+                        Create Article
+                        <ArrowRight className="h-4 w-4" />
+                      </Link>
+                    </div>
+                  ) : null}
+                </div>
               </div>
-              {task === 'article' ? (
-                <Link
-                  href="/create/article"
-                  className="inline-flex shrink-0 items-center gap-2 rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-slate-800"
-                >
-                  <Plus className="h-4 w-4" aria-hidden />
-                  New article
-                </Link>
-              ) : null}
             </div>
 
-            <div className="grid gap-10 lg:grid-cols-[minmax(0,260px)_1fr] lg:items-start">
-              <aside className="space-y-4 lg:sticky lg:top-28 lg:self-start">
-                <Link
-                  href="/search"
-                  className="journal-card flex items-center gap-3 px-4 py-3.5 text-sm font-medium text-slate-600 transition hover:text-slate-900"
-                >
-                  <Search className="h-4 w-4 shrink-0 text-indigo-500" aria-hidden />
-                  <span className="truncate">Search articles…</span>
-                </Link>
-                <div className={`journal-card space-y-3 p-4 ${ui.soft}`}>
-                  <p className={`text-xs font-semibold uppercase tracking-[0.2em] ${ui.muted}`}>Filter by topic</p>
-                  <form className="grid gap-3" action={taskConfig?.route || '#'} method="get">
-                    <select
-                      name="category"
-                      defaultValue={normalizedCategory}
-                      className={`h-11 w-full rounded-xl px-3 text-sm ${ui.input}`}
-                    >
-                      <option value="all">All categories</option>
-                      {CATEGORY_OPTIONS.map((item) => (
-                        <option key={item.slug} value={item.slug}>
-                          {item.name}
-                        </option>
-                      ))}
-                    </select>
-                    <button type="submit" className={`h-11 w-full rounded-xl text-sm font-semibold ${ui.button}`}>
-                      Apply filter
-                    </button>
-                  </form>
+            <div className="grid gap-12 lg:grid-cols-[minmax(0,320px)_1fr] lg:items-start">
+              <aside className="space-y-6 lg:sticky lg:top-28 lg:self-start">
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-violet-500/10 to-emerald-500/10 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
+                  <Link
+                    href="/search"
+                    className="relative flex items-center gap-3 rounded-2xl border border-slate-200/60 bg-white/80 p-4 text-sm font-medium text-slate-600 backdrop-blur-sm transition-all duration-300 hover:border-violet-300 hover:bg-violet-50/50 hover:text-violet-700 hover:shadow-lg"
+                  >
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500 to-emerald-500 text-white">
+                      <Search className="h-4 w-4" aria-hidden />
+                    </div>
+                    <span className="truncate">Search articles...</span>
+                  </Link>
+                </div>
+                
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-violet-500/10 to-emerald-500/10 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
+                  <div className="relative rounded-2xl border border-slate-200/60 bg-white/80 p-6 backdrop-blur-sm">
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="h-2 w-2 rounded-full bg-gradient-to-r from-violet-500 to-emerald-500"></div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-600">Filter by topic</p>
+                    </div>
+                    <form className="grid gap-4" action={taskConfig?.route || '#'} method="get">
+                      <select
+                        name="category"
+                        defaultValue={normalizedCategory}
+                        className="h-12 w-full rounded-xl border border-slate-200/60 bg-white/80 px-4 text-sm backdrop-blur-sm transition-all duration-300 focus:border-violet-400 focus:ring-2 focus:ring-violet-400/20"
+                      >
+                        <option value="all">All categories</option>
+                        {CATEGORY_OPTIONS.map((item) => (
+                          <option key={item.slug} value={item.slug}>
+                            {item.name}
+                          </option>
+                        ))}
+                      </select>
+                      <button 
+                        type="submit" 
+                        className="h-12 w-full rounded-xl bg-gradient-to-r from-violet-600 to-emerald-600 px-4 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.02] active:scale-[0.98]"
+                      >
+                        Apply Filter
+                      </button>
+                    </form>
+                  </div>
+                </div>
+                
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-violet-500/10 to-emerald-500/10 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
+                  <div className="relative rounded-2xl border border-slate-200/60 bg-white/80 p-6 backdrop-blur-sm">
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="h-2 w-2 rounded-full bg-gradient-to-r from-violet-500 to-emerald-500"></div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-600">Quick Stats</p>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-slate-600">Total Articles</span>
+                        <span className="text-sm font-semibold text-slate-900">{posts.length}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-slate-600">Categories</span>
+                        <span className="text-sm font-semibold text-slate-900">{CATEGORY_OPTIONS.length}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-slate-600">Updated</span>
+                        <span className="text-sm font-semibold text-slate-900">Today</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </aside>
-              <div className="min-w-0 space-y-10">
+              
+              <div className="min-w-0 space-y-12">
                 {intro ? (
-                  <div className={`journal-card p-6 sm:p-8 ${ui.panel}`}>
-                    <h2 className="text-xl font-semibold text-foreground">{intro.title}</h2>
-                    {intro.paragraphs.map((paragraph) => (
-                      <p key={paragraph.slice(0, 40)} className={`mt-4 text-sm leading-7 ${ui.muted}`}>
-                        {paragraph}
-                      </p>
-                    ))}
-                    <div className="mt-4 flex flex-wrap gap-4 text-sm">
-                      {intro.links.map((link) => (
-                        <a key={link.href} href={link.href} className="font-semibold text-indigo-600 hover:text-indigo-700">
-                          {link.label}
-                        </a>
+                  <div className="relative group">
+                    <div className="absolute inset-0 bg-gradient-to-r from-violet-500/10 to-emerald-500/10 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
+                    <div className="relative rounded-3xl border border-slate-200/60 bg-white/80 p-8 backdrop-blur-sm">
+                      <div className="flex items-center gap-2 mb-6">
+                        <div className="h-2 w-2 rounded-full bg-gradient-to-r from-violet-500 to-emerald-500"></div>
+                        <h2 className="text-2xl font-bold text-slate-900">{intro.title}</h2>
+                      </div>
+                      {intro.paragraphs.map((paragraph) => (
+                        <p key={paragraph.slice(0, 40)} className="mt-4 text-base leading-7 text-slate-600">
+                          {paragraph}
+                        </p>
                       ))}
+                      <div className="mt-6 flex flex-wrap gap-4">
+                        {intro.links.map((link) => (
+                          <a 
+                            key={link.href} 
+                            href={link.href} 
+                            className="relative inline-flex items-center gap-1 text-sm font-semibold text-violet-600 hover:text-violet-700 transition-colors duration-200"
+                          >
+                            {link.label}
+                            <ArrowRight className="h-3 w-3" />
+                          </a>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 ) : null}
