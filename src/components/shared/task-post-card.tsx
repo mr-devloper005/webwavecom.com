@@ -186,41 +186,69 @@ export function TaskPostCard({
   if (variant === 'article') {
     const readMinutes = Math.max(3, Math.min(16, Math.round((getExcerpt(content.description || post.summary, 400) || '').length / 55)))
     return (
-      <Link href={href} className={`group flex h-full flex-col overflow-hidden ${visualVariant.frame}`}>
-        <div className={`relative ${imageAspect} overflow-hidden bg-slate-100`}>
-          <ContentImage
-            src={image}
-            alt={altText}
-            fill
-            sizes={imageSizes}
-            quality={75}
-            className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-            intrinsicWidth={960}
-            intrinsicHeight={720}
-          />
-        </div>
-        <div className={`flex flex-1 flex-col p-5 sm:p-6 ${compact ? 'py-4' : ''}`}>
-          <p className={visualVariant.badge}>{category}</p>
-          <h3 className={`mt-2 line-clamp-2 text-lg font-semibold leading-snug sm:text-[1.2rem] ${visualVariant.title}`}>{post.title}</h3>
-          <p className={`mt-3 line-clamp-3 text-sm leading-7 ${visualVariant.muted}`}>
-            {getExcerpt(content.description || post.summary) || 'Open the story for the full narrative and practical notes.'}
-          </p>
-          <div className="mt-auto flex items-center justify-between gap-3 border-t border-slate-100/90 pt-4">
-            <div className="flex min-w-0 items-center gap-2 text-xs text-slate-600">
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-200 text-[10px] font-bold text-slate-700">
-                {(post.authorName || 'Ed').slice(0, 2).toUpperCase()}
+      <Link href={href} className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/60 bg-white/80 backdrop-blur-sm transition-all duration-300 hover:border-violet-300 hover:shadow-xl hover:-translate-y-1">
+        <div className="absolute -inset-1 bg-gradient-to-r from-violet-500/10 to-emerald-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+        <div className="relative z-10">
+          <div className={`relative ${imageAspect} overflow-hidden bg-slate-100`}>
+            <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 to-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <ContentImage
+              src={image}
+              alt={altText}
+              fill
+              sizes={imageSizes}
+              quality={75}
+              className="object-cover transition-transform duration-700 group-hover:scale-[1.05]"
+              intrinsicWidth={960}
+              intrinsicHeight={720}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="absolute left-4 top-4">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/90 backdrop-blur-sm px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-violet-700">
+                <div className="h-1.5 w-1.5 rounded-full bg-violet-500"></div>
+                {category}
               </span>
-              <div className="min-w-0">
-                <p className="truncate font-semibold text-slate-900">{post.authorName || 'Editorial'}</p>
-                <p className="flex items-center gap-1 text-[11px] text-slate-500">
-                  <Clock className="h-3 w-3" aria-hidden />
-                  {readMinutes} min read
-                </p>
+            </div>
+            <div className="absolute right-4 top-4 opacity-0 group-hover:opacity-100 transition-all duration-300">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 backdrop-blur-sm shadow-lg">
+                <ArrowUpRight className="h-4 w-4 text-violet-600" />
               </div>
             </div>
-            <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition group-hover:border-indigo-200 group-hover:text-indigo-600">
-              <ArrowUpRight className="h-4 w-4" aria-hidden />
-            </span>
+          </div>
+          <div className={`flex flex-1 flex-col p-5 sm:p-6 ${compact ? 'py-4' : ''}`}>
+            <div className="flex items-center justify-between gap-2 mb-3">
+              <div className="flex items-center gap-2">
+                <div className="h-6 w-6 rounded-full bg-gradient-to-br from-violet-500 to-emerald-500"></div>
+                <span className="text-xs font-medium text-violet-600 uppercase tracking-wide">Featured</span>
+              </div>
+              <div className="flex items-center gap-1 text-xs text-slate-500">
+                <Clock className="h-3 w-3" aria-hidden />
+                {readMinutes} min
+              </div>
+            </div>
+            <h3 className="line-clamp-2 text-lg font-bold leading-tight text-slate-900 sm:text-xl group-hover:text-violet-700 transition-colors duration-200 font-bungee">
+              {post.title}
+            </h3>
+            <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-slate-600">
+              {getExcerpt(content.description || post.summary) || 'Open story for full narrative and practical notes.'}
+            </p>
+            <div className="mt-auto flex items-center justify-between gap-3 border-t border-slate-100/90 pt-4">
+              <div className="flex min-w-0 items-center gap-3">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-gradient-to-br from-violet-500 to-emerald-500 rounded-full blur-md opacity-30"></div>
+                  <div className="relative h-10 w-10 rounded-full bg-gradient-to-br from-violet-500 to-emerald-500 flex items-center justify-center text-white text-xs font-bold">
+                    {(post.authorName || 'Ed').slice(0, 2).toUpperCase()}
+                  </div>
+                </div>
+                <div className="min-w-0">
+                  <p className="truncate font-semibold text-slate-900 text-sm">{post.authorName || 'Editorial Team'}</p>
+                  <p className="text-xs text-slate-500">{post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'Recent'}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="h-1 w-1 rounded-full bg-slate-300"></div>
+                <span className="text-xs font-medium text-violet-600">Read more</span>
+              </div>
+            </div>
           </div>
         </div>
       </Link>

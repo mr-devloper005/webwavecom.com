@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { ArrowRight } from "lucide-react";
 import { TaskPostCard } from "@/components/shared/task-post-card";
 import { buildPostUrl } from "@/lib/task-data";
 import { normalizeCategory, isValidCategory } from "@/lib/categories";
@@ -62,14 +63,49 @@ export function TaskListClient({ task, initialPosts, category }: Props) {
   }
 
   return (
-    <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-      {merged.map((post) => {
-        const localOnly = (post as any).localOnly;
-        const href = localOnly
-          ? `/local/${task}/${post.slug}`
-          : buildPostUrl(task, post.slug);
-        return <TaskPostCard key={post.id} post={post} href={href} taskKey={task} />;
-      })}
+    <div className="space-y-8">
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        {merged.map((post, index) => {
+          const localOnly = (post as any).localOnly;
+          const href = localOnly
+            ? `/local/${task}/${post.slug}`
+            : buildPostUrl(task, post.slug);
+          
+          return (
+            <div 
+              key={post.id} 
+              className="group relative"
+              style={{
+                animationDelay: `${index * 100}ms`,
+                animation: 'fadeInUp 0.6s ease-out forwards',
+                opacity: 0
+              }}
+            >
+              <div className="absolute -inset-1 bg-gradient-to-r from-violet-500/20 to-emerald-500/20 rounded-2xl blur opacity-0 group-hover:opacity-40 transition-all duration-500 group-hover:scale-105"></div>
+              <TaskPostCard key={post.id} post={post} href={href} taskKey={task} />
+            </div>
+          );
+        })}
+      </div>
+      
+      {merged.length > 6 && (
+        <div className="relative group mt-12">
+          <div className="absolute inset-0 bg-gradient-to-r from-violet-500/10 to-emerald-500/10 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
+          <div className="relative rounded-2xl border border-slate-200/60 bg-white/80 p-8 backdrop-blur-sm text-center">
+            <div className="flex flex-col items-center gap-4">
+              <div className="h-12 w-12 rounded-full bg-gradient-to-br from-violet-500 to-emerald-500 flex items-center justify-center">
+                <ArrowRight className="h-6 w-6 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold text-slate-900">Explore more articles</h3>
+              <p className="text-sm text-slate-600 max-w-md">Dive deeper into our collection and discover more insights from our expert contributors.</p>
+              <button className="mt-2 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-violet-600 to-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-105">
+                Load More Articles
+                <ArrowRight className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
