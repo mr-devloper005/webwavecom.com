@@ -267,44 +267,114 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
         >
           <div className={cn(isClassified ? "space-y-8" : "")}>
             {isArticle ? (
-              <div className="mx-auto w-full max-w-4xl space-y-6">
-                <h1 className="text-4xl font-semibold leading-tight text-foreground">
-                  {post.title}
-                </h1>
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
-                  <span>By {articleAuthor}</span>
-                  {articleDate ? <span>{articleDate}</span> : null}
-                  <Badge variant="secondary" className="inline-flex items-center gap-1">
-                    <Tag className="h-3.5 w-3.5" />
-                    {category}
-                  </Badge>
-                </div>
-                {postTags.length ? (
-                  <div className="flex flex-wrap gap-2">
-                    {postTags.map((tag) => (
-                      <Badge key={tag} variant="outline">
-                        {tag}
+              <div className="mx-auto w-full max-w-7xl space-y-8">
+                <header className="grid gap-8 lg:grid-cols-[1fr_1.2fr] lg:gap-12 pb-8 border-b border-border/50">
+                  <div className="space-y-6">
+                    <div className="flex items-center gap-2 text-sm font-medium text-primary">
+                      <Badge variant="secondary" className="inline-flex items-center gap-1 px-3 py-1">
+                        <Tag className="h-3.5 w-3.5" />
+                        {category}
                       </Badge>
-                    ))}
+                    </div>
+                    <h1 className="text-3xl lg:text-4xl font-bold leading-tight text-foreground tracking-tight font-bungee">
+                      {post.title}
+                    </h1>
+                    <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-muted-foreground">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center">
+                          <span className="text-xs font-semibold text-primary">{articleAuthor.charAt(0).toUpperCase()}</span>
+                        </div>
+                        <span className="font-medium">{articleAuthor}</span>
+                      </div>
+                    </div>
+                    {postTags.length ? (
+                      <div className="flex flex-wrap gap-2 pt-2">
+                        {postTags.map((tag) => (
+                          <Badge key={tag} variant="outline" className="text-xs px-2 py-1">
+                            #{tag}
+                          </Badge>
+                        ))}
+                      </div>
+                    ) : null}
+                    {articleSummary ? (
+                      <p className="text-base leading-relaxed text-muted-foreground font-light">{articleSummary}</p>
+                    ) : null}
                   </div>
-                ) : null}
-                {articleSummary ? (
-                  <p className="text-base leading-7 text-muted-foreground">{articleSummary}</p>
-                ) : null}
-                {images[0] ? (
-                  <div className="relative aspect-[16/9] w-full overflow-hidden rounded-3xl border border-border bg-muted">
-                    <ContentImage
-                      src={images[0]}
-                      alt={`${post.title} featured image`}
-                      fill
-                      className="object-cover"
-                      intrinsicWidth={1600}
-                      intrinsicHeight={900}
-                    />
+                  
+                  {images[0] ? (
+                    <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-border/20 bg-muted shadow-sm lg:sticky lg:top-28 lg:h-fit">
+                      <ContentImage
+                        src={images[0]}
+                        alt={`${post.title} featured image`}
+                        fill
+                        className="object-cover"
+                        intrinsicWidth={1600}
+                        intrinsicHeight={900}
+                      />
+                    </div>
+                  ) : null}
+                </header>
+                
+                <div className="grid gap-8 lg:grid-cols-[1fr_1.2fr] lg:gap-12">
+                  <div className="space-y-6">
+                    <div className="lg:sticky lg:top-32 lg:h-fit space-y-6">
+                      <div className="rounded-2xl border border-border/20 bg-card/50 p-6 backdrop-blur-sm">
+                        <h3 className="text-lg font-semibold text-foreground mb-4">Article Details</h3>
+                        <div className="space-y-3 text-sm">
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Author</span>
+                            <span className="font-medium">{articleAuthor}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Category</span>
+                            <span className="font-medium">{category}</span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {postTags.length > 0 && (
+                        <div className="rounded-2xl border border-border/20 bg-card/50 p-6 backdrop-blur-sm">
+                          <h3 className="text-lg font-semibold text-foreground mb-4">Tags</h3>
+                          <div className="flex flex-wrap gap-2">
+                            {postTags.map((tag) => (
+                              <Badge key={tag} variant="secondary" className="hover:bg-primary/20 transition-colors cursor-pointer">
+                                #{tag}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                ) : null}
-                <RichContent html={articleHtml} className="leading-8 prose-p:my-6 prose-h2:my-8 prose-h3:my-6 prose-ul:my-6" />
-                <ArticleComments slug={post.slug} />
+                  
+                  <div className="space-y-8">
+                    <article className="prose prose-lg max-w-none">
+                      <RichContent 
+                        html={articleHtml} 
+                        className="leading-8 text-foreground/90 prose-headings:font-semibold prose-headings:tracking-tight prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-6 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-4 prose-p:text-base prose-p:leading-relaxed prose-p:my-6 prose-ul:my-6 prose-li:my-2 prose-strong:text-foreground prose-blockquote:border-l-4 prose-blockquote:border-primary/20 prose-blockquote:pl-6 prose-blockquote:italic prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-sm" 
+                      />
+                    </article>
+                    
+                    <footer className="pt-8 border-t border-border/50">
+                      <div className="space-y-6">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center">
+                              <span className="text-sm font-semibold text-primary">{articleAuthor.charAt(0).toUpperCase()}</span>
+                            </div>
+                            <div>
+                              <p className="font-medium text-foreground">{articleAuthor}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </footer>
+                    
+                    <div className="pt-8">
+                      <ArticleComments slug={post.slug} />
+                    </div>
+                  </div>
+                </div>
               </div>
             ) : null}
 

@@ -1,0 +1,13 @@
+/* Bungee Font */
+@font-face {
+  font-family: 'Bungee';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./bungee-400.woff2') format('woff2'),
+       url('./bungee-400.woff') format('woff'),
+       url('./bungee-400.ttf') format('truetype');
+  font-display: swap;
+}
+
+/* Fallback to Google Fonts if local files not available */
+@import url('https://fonts.googleapis.com/css2?family=Bungee&display=swap');
