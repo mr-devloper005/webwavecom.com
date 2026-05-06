@@ -1,12 +1,12 @@
 export const siteTaskDefinitions = [
   {
-    key: 'article',
-    label: 'Articles',
-    route: '/articles',
-    description: 'Long-form guides, essays, and editorial features.',
-    contentType: 'article',
-    enabled: true,
-  },
+  key: 'article',
+  label: 'Article',
+  route: '/article',
+  description: 'Curated article content.',
+  contentType: 'article',
+  enabled: true,
+},
 ] as const
 
 export const siteTaskViews = {
