@@ -1,173 +1,56 @@
-import type { Metadata } from 'next'
-import Link from 'next/link'
-import { Clock, FileText, Mail, MapPin, MessageSquare, Sparkles } from 'lucide-react'
-import { PageShell } from '@/components/shared/page-shell'
-import { Button } from '@/components/ui/button'
-import { SITE_CONFIG } from '@/lib/site-config'
-import { buildPageMetadata } from '@/lib/seo'
+import { Mail, MessageSquareText, ShieldCheck } from 'lucide-react';
 
-export async function generateMetadata(): Promise<Metadata> {
-  return buildPageMetadata({
-    path: '/contact',
-    title: `Contact | ${SITE_CONFIG.name}`,
-    description: `Reach the ${SITE_CONFIG.name} editorial desk for pitches, syndication, partnerships, and reader support.`,
-    keywords: ['contact', 'editorial', 'partnerships', SITE_CONFIG.name],
-  })
-}
+import { ContactLeadForm } from '@/components/shared/contact-lead-form';
+import { Footer } from '@/components/shared/footer';
+import { NavbarShell } from '@/components/shared/navbar-shell';
 
-const lanes = [
-  {
-    icon: FileText,
-    title: 'Editorial & pitches',
-    body: 'Send three clips, a headline idea, and the reader promise in two sentences. We reply within five business days when there is a fit.',
-  },
-  {
-    icon: Sparkles,
-    title: 'Press & speaking',
-    body: 'Request logos, boilerplate, or book a briefing with our editors for podcasts, newsletters, and broadcast segments.',
-  },
-  {
-    icon: MessageSquare,
-    title: 'Product & accessibility',
-    body: 'Flag broken layouts, contrast issues, or search bugs. Include your browser, URL, and a short screen recording if you can.',
-  },
-]
+const siteName = process.env.NEXT_PUBLIC_SITE_NAME || 'Web Wave Com';
 
-const quickFacts = [
-  { label: 'Typical reply', value: '2–5 days' },
-  { label: 'Desk hours', value: 'Mon–Fri · 9–6 ET' },
-  { label: 'Studio', value: 'Remote-first' },
-]
+const contactHighlights = [
+  { icon: Mail, title: 'Direct response', copy: 'Your message is saved securely and routed to the right team.' },
+  { icon: MessageSquareText, title: 'Clear details', copy: 'Share your requirement, question, or collaboration idea in one place.' },
+  { icon: ShieldCheck, title: 'Reliable follow-up', copy: 'We keep the request record so every conversation stays traceable.' },
+];
 
 export default function ContactPage() {
   return (
-    <PageShell
-      heroVariant="center"
-      eyebrow="Contact"
-      title="Let’s build the next story together"
-      description={`Tell us what you need—publishing help, a partnership, or a fix on the site. We route every note to the right person on the ${SITE_CONFIG.name} team.`}
-      actions={
-        <Button variant="outline" className="rounded-full border-slate-200 bg-white px-6 shadow-sm" asChild>
-          <Link href="/articles">Browse articles</Link>
-        </Button>
-      }
-    >
-      <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
-        <div className="space-y-6">
-          <div className="journal-card p-6 sm:p-8">
-            <h2 className="text-xl font-semibold tracking-tight text-slate-950 sm:text-2xl">Choose the lane that fits</h2>
-            <p className="mt-2 text-sm leading-relaxed text-slate-600 sm:text-base">
-              We read every message. Clear subject lines and context up front help us respond with substance—not a template.
-            </p>
-            <ul className="mt-8 space-y-5">
-              {lanes.map((lane) => (
-                <li key={lane.title} className="flex gap-4 border-b border-slate-100 pb-6 last:border-b-0 last:pb-0">
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-indigo-600 shadow-sm">
-                    <lane.icon className="h-5 w-5" aria-hidden />
-                  </div>
-                  <div>
-                    <h3 className="text-base font-semibold text-slate-950">{lane.title}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-slate-600">{lane.body}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
+    <div className="min-h-screen bg-[#f7f1e8] text-stone-950">
+      <NavbarShell />
+      <main>
+        <section className="relative overflow-hidden px-6 py-20 md:px-10 lg:px-16">
+          <div className="absolute left-[-10%] top-10 h-72 w-72 rounded-full bg-amber-200/40 blur-3xl" />
+          <div className="absolute bottom-0 right-[-8%] h-80 w-80 rounded-full bg-stone-300/50 blur-3xl" />
 
-          <div className="grid gap-4 sm:grid-cols-3">
-            {quickFacts.map((item) => (
-              <div key={item.label} className="journal-card px-4 py-5 text-center">
-                <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">{item.label}</p>
-                <p className="mt-2 text-lg font-semibold text-slate-950">{item.value}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="rounded-[1.25rem] border border-indigo-200/60 bg-gradient-to-br from-indigo-50/80 via-white to-sky-50/40 p-6 sm:flex sm:items-center sm:justify-between sm:gap-6">
-            <div className="flex items-start gap-3">
-              <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-indigo-600" aria-hidden />
-              <div>
-                <p className="font-semibold text-slate-950">Prefer mail?</p>
-                <p className="mt-1 text-sm text-slate-600">
-                  Editorial:{' '}
-                  <a href={`mailto:hello@${SITE_CONFIG.domain}`} className="font-medium text-indigo-700 underline-offset-2 hover:underline">
-                    {`hello@${SITE_CONFIG.domain}`}
-                  </a>
-                </p>
-              </div>
-            </div>
-            <Button variant="outline" className="mt-4 w-full shrink-0 rounded-full border-white/80 bg-white/90 sm:mt-0 sm:w-auto" asChild>
-              <a href={`mailto:hello@${SITE_CONFIG.domain}`} className="inline-flex items-center gap-2">
-                <Mail className="h-4 w-4" />
-                Open email
-              </a>
-            </Button>
-          </div>
-        </div>
-
-        <div className="lg:sticky lg:top-28">
-          <div className="journal-card p-6 sm:p-8">
-            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-              <Mail className="h-4 w-4 text-indigo-500" aria-hidden />
-              Send a message
-            </div>
-            <h2 className="mt-3 text-xl font-semibold text-slate-950">Write to the desk</h2>
-            <p className="mt-2 text-sm text-slate-600">
-              This form is for demos—submit still feels great while we wire automations on the backend.
-            </p>
-            <form className="mt-6 grid gap-4">
-              <div>
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500" htmlFor="contact-name">
-                  Name
-                </label>
-                <input
-                  id="contact-name"
-                  className="h-12 w-full rounded-xl border border-slate-200 bg-slate-50/80 px-4 text-sm text-slate-900 outline-none ring-indigo-500/25 placeholder:text-slate-400 focus:ring-2"
-                  placeholder="Alex Reader"
-                />
-              </div>
-              <div>
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500" htmlFor="contact-email">
-                  Email
-                </label>
-                <input
-                  id="contact-email"
-                  type="email"
-                  className="h-12 w-full rounded-xl border border-slate-200 bg-slate-50/80 px-4 text-sm text-slate-900 outline-none ring-indigo-500/25 placeholder:text-slate-400 focus:ring-2"
-                  placeholder="you@company.com"
-                />
-              </div>
-              <div>
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500" htmlFor="contact-subject">
-                  Topic
-                </label>
-                <input
-                  id="contact-subject"
-                  className="h-12 w-full rounded-xl border border-slate-200 bg-slate-50/80 px-4 text-sm text-slate-900 outline-none ring-indigo-500/25 placeholder:text-slate-400 focus:ring-2"
-                  placeholder="Partnership, pitch, bug…"
-                />
-              </div>
-              <div>
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500" htmlFor="contact-body">
-                  Message
-                </label>
-                <textarea
-                  id="contact-body"
-                  className="min-h-[168px] w-full rounded-xl border border-slate-200 bg-slate-50/80 px-4 py-3 text-sm text-slate-900 outline-none ring-indigo-500/25 placeholder:text-slate-400 focus:ring-2"
-                  placeholder="Share context, links, and what a great outcome looks like for you."
-                />
-              </div>
-              <Button type="submit" className="h-12 rounded-full bg-slate-900 text-sm font-semibold hover:bg-slate-800">
-                Send message
-              </Button>
-              <p className="flex items-center gap-2 text-xs text-slate-500">
-                <Clock className="h-3.5 w-3.5 shrink-0" aria-hidden />
-                We read everything—automated receipts are not wired yet on this build.
+          <div className="relative mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+            <div>
+              <p className="text-sm font-black uppercase tracking-[0.35em] text-stone-500">Contact</p>
+              <h1 className="mt-5 max-w-3xl text-5xl font-black leading-[0.95] tracking-[-0.06em] text-stone-950 md:text-7xl">
+                Let&apos;s talk about your next move.
+              </h1>
+              <p className="mt-6 max-w-2xl text-lg leading-8 text-stone-700">
+                Use this form to reach {siteName}. Your request will be recorded and shared with the support team for follow-up.
               </p>
-            </form>
+
+              <div className="mt-8 grid gap-4">
+                {contactHighlights.map((item) => (
+                  <div key={item.title} className="flex gap-4 rounded-3xl border border-stone-200 bg-white/60 p-5 shadow-sm">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-stone-950 text-white">
+                      <item.icon className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h2 className="text-base font-black text-stone-950">{item.title}</h2>
+                      <p className="mt-1 text-sm leading-6 text-stone-600">{item.copy}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <ContactLeadForm />
           </div>
-        </div>
-      </div>
-    </PageShell>
-  )
+        </section>
+      </main>
+      <Footer />
+    </div>
+  );
 }
