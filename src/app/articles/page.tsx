@@ -14,6 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
   })
 }
 
-export default function ArticlesPage({ searchParams }: { searchParams?: { category?: string } }) {
-  return <TaskListPage task="article" category={searchParams?.category} />;
+export default async function ArticlesPage({ searchParams }: { searchParams?: Promise<{ category?: string }> }) {
+  const resolvedParams = await searchParams;
+  return <TaskListPage task="article" category={resolvedParams?.category} />;
 }

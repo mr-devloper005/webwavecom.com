@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { ArrowRight, BookOpen, Layers, Sparkles, Target } from 'lucide-react'
 import { PageShell } from '@/components/shared/page-shell'
 import { Button } from '@/components/ui/button'
-import { mockTeamMembers } from '@/data/mock-data'
 import { SITE_CONFIG } from '@/lib/site-config'
 import { buildPageMetadata } from '@/lib/seo'
 
@@ -32,12 +31,6 @@ const pillars = [
     body: 'Search, categories, and saved sessions help you pick up where you left off—whether you are researching a topic or browsing on a break.',
     icon: Target,
   },
-]
-
-const milestones = [
-  { year: '2024', label: 'Foundation', detail: 'Launched the editorial stack with article-first navigation and responsive layouts.' },
-  { year: '2025', label: 'Scale', detail: 'Expanded topic coverage, improved search relevance, and refined reading surfaces.' },
-  { year: '2026', label: 'Today', detail: 'Focused on faster loads, softer motion, and a cohesive resource-center experience.' },
 ]
 
 export default function AboutPage() {
@@ -99,52 +92,6 @@ export default function AboutPage() {
               <div>
                 <h3 className="text-lg font-semibold text-slate-950">{pillar.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-slate-600">{pillar.body}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="mt-14">
-        <div className="mb-8 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">Timeline</p>
-          <h2 className="mt-3 text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">How the library took shape</h2>
-        </div>
-        <div className="grid gap-4 md:grid-cols-3">
-          {milestones.map((m) => (
-            <div key={m.year} className="journal-card p-6 text-left">
-              <p className="text-sm font-semibold text-indigo-600">{m.year}</p>
-              <h3 className="mt-2 text-lg font-semibold text-slate-950">{m.label}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-slate-600">{m.detail}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="mt-14">
-        <div className="mb-8 flex flex-col gap-2 text-center sm:flex-row sm:items-end sm:justify-between sm:text-left">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">People behind the bylines</p>
-            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">Editorial collective</h2>
-          </div>
-          <Button variant="ghost" className="self-center text-indigo-600 hover:text-indigo-700 sm:self-auto" asChild>
-            <Link href="/team" className="inline-flex items-center gap-2">
-              Full roster
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </Button>
-        </div>
-        <div className="grid gap-6 md:grid-cols-3">
-          {mockTeamMembers.map((member) => (
-            <div key={member.id} className="journal-card overflow-hidden">
-              <div className="relative aspect-[4/3] bg-slate-100">
-                <img src={member.avatar} alt={member.name} className="h-full w-full object-cover" />
-              </div>
-              <div className="space-y-2 p-6">
-                <p className="text-lg font-semibold text-slate-950">{member.name}</p>
-                <p className="text-xs font-semibold uppercase tracking-wide text-indigo-600">{member.role}</p>
-                <p className="text-sm leading-relaxed text-slate-600">{member.bio}</p>
-                <p className="text-xs text-slate-500">{member.location}</p>
               </div>
             </div>
           ))}

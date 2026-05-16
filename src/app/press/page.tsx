@@ -3,16 +3,16 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Download, Newspaper, Sparkles } from 'lucide-react'
+import { Download, FileArchive, Newspaper, Sparkles } from 'lucide-react'
 import { PageShell } from '@/components/shared/page-shell'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { useToast } from '@/components/ui/use-toast'
 import { mockPressAssets, mockPressCoverage } from '@/data/mock-data'
 import { SITE_CONFIG } from '@/lib/site-config'
 
+const getDownloadHref = (assetId: string) => `/api/press-kit/${assetId}`
+
 export default function PressPage() {
-  const { toast } = useToast()
   const [activeAssetId, setActiveAssetId] = useState<string | null>(null)
   const activeAsset = mockPressAssets.find((asset) => asset.id === activeAssetId)
 
@@ -48,23 +48,22 @@ export default function PressPage() {
                   <p className="mt-1 text-sm text-slate-600">{asset.description}</p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="rounded-full bg-slate-900 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-white">
+                  <a
+                    href={getDownloadHref(asset.id)}
+                    download
+                    className="inline-flex items-center gap-1 rounded-full bg-slate-900 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-white transition hover:bg-slate-800"
+                    title={`Download ${asset.title}`}
+                  >
+                    <FileArchive className="h-3 w-3" aria-hidden />
                     {asset.fileType}
-                  </span>
+                  </a>
                   <Button size="sm" variant="outline" className="rounded-full border-slate-200" onClick={() => setActiveAssetId(asset.id)}>
                     Preview
                   </Button>
-                  <Button
-                    size="sm"
-                    className="rounded-full bg-slate-900 hover:bg-slate-800"
-                    onClick={() =>
-                      toast({
-                        title: 'Download started',
-                        description: `${asset.title} is downloading.`,
-                      })
-                    }
-                  >
-                    Download
+                  <Button size="sm" className="rounded-full bg-slate-900 hover:bg-slate-800" asChild>
+                    <a href={getDownloadHref(asset.id)} download>
+                      Download
+                    </a>
                   </Button>
                 </div>
               </div>
@@ -81,7 +80,6 @@ export default function PressPage() {
             <div key={item.id} className="journal-card p-6 transition hover:border-indigo-200/80">
               <p className="text-xs font-semibold uppercase tracking-wide text-indigo-600">{item.outlet}</p>
               <p className="mt-3 text-base font-medium leading-snug text-slate-950">{item.headline}</p>
-              <p className="mt-3 text-xs text-slate-500">{item.date}</p>
             </div>
           ))}
 
@@ -113,16 +111,10 @@ export default function PressPage() {
             <Button variant="outline" className="rounded-full" onClick={() => setActiveAssetId(null)}>
               Close
             </Button>
-            <Button
-              className="rounded-full bg-slate-900 hover:bg-slate-800"
-              onClick={() =>
-                toast({
-                  title: 'Download started',
-                  description: `${activeAsset?.title} is downloading.`,
-                })
-              }
-            >
-              Download {activeAsset?.fileType}
+            <Button className="rounded-full bg-slate-900 hover:bg-slate-800" asChild>
+              <a href={activeAsset ? getDownloadHref(activeAsset.id) : '#'} download>
+                Download {activeAsset?.fileType}
+              </a>
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -2,7 +2,7 @@ import type { TaskKey } from '@/lib/site-config'
 
 export const siteContent = {
   navbar: {
-    tagline: 'Editorial resource center',
+    tagline: '',
   },
   footer: {
     tagline: 'Guides, essays, and practical reads',

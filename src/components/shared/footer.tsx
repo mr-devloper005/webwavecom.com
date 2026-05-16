@@ -26,8 +26,6 @@ const footerLinks = {
   })),
   company: [
     { name: 'About', href: '/about' },
-    { name: 'Team', href: '/team' },
-    { name: 'Careers', href: '/careers' },
     { name: 'Blog', href: '/blog' },
     { name: 'Press', href: '/press' },
   ],
@@ -74,6 +72,12 @@ export function Footer() {
                 {task.label}
               </Link>
             ))}
+            <Link href="/contact" className="rounded-lg border border-[#d7deca] bg-white px-3 py-2 text-sm font-medium text-[#1f2617] hover:bg-[#ebefdf]">
+              Contact
+            </Link>
+            <Link href="/help" className="rounded-lg border border-[#d7deca] bg-white px-3 py-2 text-sm font-medium text-[#1f2617] hover:bg-[#ebefdf]">
+              Help Center
+            </Link>
           </div>
         </div>
       </footer>
@@ -122,6 +126,9 @@ export function Footer() {
               </div>
               <div>
                 <h3 className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">Connect</h3>
+                <Link href="/contact" className="mt-4 inline-flex text-sm font-semibold text-slate-200 hover:text-white">
+                  Contact
+                </Link>
                 <div className="mt-4 flex gap-3">
                   {socialLinks.map((item) => (
                     <Link key={item.name} href={item.href} target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/10 bg-white/8 p-2.5 text-slate-200 hover:bg-white/12 hover:text-white">
@@ -142,7 +149,7 @@ export function Footer() {
     return (
       <footer className="border-t border-slate-200/80 bg-[linear-gradient(180deg,#ffffff_0%,#f4f6fb_100%)] text-slate-900">
         <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-          <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr_0.85fr]">
+          <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr_0.85fr_0.85fr]">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-600 shadow-sm">
                 <Sparkles className="h-3.5 w-3.5 text-indigo-500" />
@@ -173,6 +180,21 @@ export function Footer() {
               <h4 className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Company</h4>
               <ul className="mt-4 space-y-3 text-sm text-slate-700">
                 {footerLinks.company.map((item) => (
+                  <li key={item.name}>
+                    <Link href={item.href} className="transition hover:text-slate-950">
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Support</h4>
+              <ul className="mt-4 space-y-3 text-sm text-slate-700">
+                {[
+                  { name: 'Contact', href: '/contact' },
+                  { name: 'Help Center', href: '/help' },
+                ].map((item) => (
                   <li key={item.name}>
                     <Link href={item.href} className="transition hover:text-slate-950">
                       {item.name}

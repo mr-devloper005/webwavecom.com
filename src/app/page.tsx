@@ -10,7 +10,6 @@ import { SITE_CONFIG, type TaskKey } from '@/lib/site-config'
 import { buildPageMetadata } from '@/lib/seo'
 import { fetchTaskPosts } from '@/lib/task-data'
 import { siteContent } from '@/config/site.content'
-import { CATEGORY_OPTIONS } from '@/lib/categories'
 import { getFactoryState } from '@/design/factory/get-factory-state'
 import { getProductKind, type ProductKind } from '@/design/factory/get-product-kind'
 import type { SitePost } from '@/lib/site-connector'
@@ -259,7 +258,6 @@ function DirectoryHome({ primaryTask, enabledTasks, listingPosts, classifiedPost
 function EditorialHome({ primaryTask, articlePosts }: { primaryTask?: EnabledTask; articlePosts: SitePost[] }) {
   const lead = articlePosts[0]
   const gridPosts = articlePosts.slice(1, 10)
-  const browseCategories = CATEGORY_OPTIONS.slice(0, 14)
   const readMins = (post: SitePost) => {
     const base = (post.summary || '').length + (typeof post.content === 'object' && post.content && typeof (post.content as { description?: string }).description === 'string' ? (post.content as { description: string }).description.length : 0)
     return Math.max(3, Math.min(18, Math.round(base / 900)))
@@ -268,11 +266,7 @@ function EditorialHome({ primaryTask, articlePosts }: { primaryTask?: EnabledTas
   return (
     <main className="bg-transparent text-slate-900">
       <section className="mx-auto max-w-7xl px-4 pb-8 pt-10 text-center sm:px-6 lg:px-8 lg:pb-10 lg:pt-14">
-        <span className="editorial-label mx-auto">
-          <FileText className="h-3.5 w-3.5" aria-hidden />
-          {siteContent.hero.badge}
-        </span>
-        <h1 className="mt-6 text-4xl font-semibold tracking-[-0.04em] text-slate-950 sm:text-5xl lg:text-[2.85rem]">
+        <h1 className="text-4xl font-semibold tracking-[-0.04em] text-slate-950 sm:text-5xl lg:text-[2.85rem]">
           {siteContent.hero.title[0]} <span className="text-indigo-600/95">{siteContent.hero.title[1]}</span>
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-slate-600">{siteContent.hero.description}</p>
@@ -304,51 +298,6 @@ function EditorialHome({ primaryTask, articlePosts }: { primaryTask?: EnabledTas
               <Search className="h-4 w-4 shrink-0 text-indigo-500" aria-hidden />
               <span className="truncate">{siteContent.hero.searchPlaceholder}</span>
             </Link>
-
-            <form action="/articles" method="get" className="journal-card space-y-3 p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Filter articles</p>
-              <select
-                name="category"
-                defaultValue="all"
-                className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50/80 px-3 text-sm text-slate-900 outline-none ring-indigo-500/30 focus:ring-2"
-              >
-                <option value="all">All topics</option>
-                {CATEGORY_OPTIONS.slice(0, 18).map((item) => (
-                  <option key={item.slug} value={item.slug}>
-                    {item.name}
-                  </option>
-                ))}
-              </select>
-              <button
-                type="submit"
-                className="h-11 w-full rounded-xl bg-slate-900 text-sm font-semibold text-white transition hover:bg-slate-800"
-              >
-                Apply filter
-              </button>
-            </form>
-
-            <div className="journal-card p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Browse by categories</p>
-              <ul className="mt-4 space-y-1">
-                <li>
-                  <Link href="/articles" className="group flex items-center gap-2 rounded-lg px-2 py-2 text-sm font-semibold text-slate-900">
-                    <span className="h-6 w-1 rounded-full bg-indigo-500" aria-hidden />
-                    All categories
-                  </Link>
-                </li>
-                {browseCategories.map((cat) => (
-                  <li key={cat.slug}>
-                    <Link
-                      href={`/articles?category=${encodeURIComponent(cat.slug)}`}
-                      className="flex items-center gap-2 rounded-lg px-2 py-2 text-sm text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
-                    >
-                      <span className="h-6 w-1 shrink-0 rounded-full bg-slate-200/80" aria-hidden />
-                      {cat.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
           </aside>
 
           <div className="space-y-10">

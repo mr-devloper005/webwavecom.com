@@ -69,15 +69,21 @@ export const fetchTaskPostBySlug = async (task: TaskKey, slug: string) => {
   const type = getTaskContentType(task);
   const resolveFromFeed = (feed: SiteFeed<SitePost> | null) =>
     feed?.posts.find((post) => post.slug === slug && getPostType(post) === type) || null;
+  const resolveArticleFallbackFromFeed = (feed: SiteFeed<SitePost> | null) =>
+    task === "article" ? feed?.posts.find((post) => post.slug === slug) || null : null;
 
   try {
     const cachedFeed = await fetchSiteFeed(200);
     const cachedMatch = resolveFromFeed(cachedFeed);
     if (cachedMatch) return cachedMatch;
+    const cachedArticleFallback = resolveArticleFallbackFromFeed(cachedFeed);
+    if (cachedArticleFallback) return cachedArticleFallback;
 
     const freshFeed = await fetchSiteFeed(200, { fresh: true });
     const freshMatch = resolveFromFeed(freshFeed);
     if (freshMatch) return freshMatch;
+    const freshArticleFallback = resolveArticleFallbackFromFeed(freshFeed);
+    if (freshArticleFallback) return freshArticleFallback;
   } catch {
     // fall through to mock data
   }

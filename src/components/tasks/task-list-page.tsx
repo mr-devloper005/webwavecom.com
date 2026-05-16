@@ -236,30 +236,6 @@ export async function TaskListPage({ task, category }: { task: TaskKey; category
                     </form>
                   </div>
                 </div>
-                
-                <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-violet-500/10 to-emerald-500/10 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
-                  <div className="relative rounded-2xl border border-slate-200/60 bg-white/80 p-6 backdrop-blur-sm">
-                    <div className="flex items-center gap-2 mb-4">
-                      <div className="h-2 w-2 rounded-full bg-gradient-to-r from-violet-500 to-emerald-500"></div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-600">Quick Stats</p>
-                    </div>
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm text-slate-600">Total Articles</span>
-                        <span className="text-sm font-semibold text-slate-900">{posts.length}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm text-slate-600">Categories</span>
-                        <span className="text-sm font-semibold text-slate-900">{CATEGORY_OPTIONS.length}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm text-slate-600">Updated</span>
-                        <span className="text-sm font-semibold text-slate-900">Today</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </aside>
               
               <div className="min-w-0 space-y-12">
