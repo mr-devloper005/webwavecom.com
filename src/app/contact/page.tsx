@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Clock, FileText, Mail, MapPin, MessageSquare, Sparkles } from 'lucide-react'
+import { FileText, Mail, MessageSquare, Sparkles } from 'lucide-react'
 import { PageShell } from '@/components/shared/page-shell'
 import { Button } from '@/components/ui/button'
 import { SITE_CONFIG } from '@/lib/site-config'
@@ -32,12 +32,6 @@ const lanes = [
     title: 'Product & accessibility',
     body: 'Flag broken layouts, contrast issues, or search bugs. Include your browser, URL, and a short screen recording if you can.',
   },
-]
-
-const quickFacts = [
-  { label: 'Typical reply', value: '2–5 days' },
-  { label: 'Desk hours', value: 'Mon–Fri · 9–6 ET' },
-  { label: 'Studio', value: 'Remote-first' },
 ]
 
 export default function ContactPage() {
@@ -75,35 +69,6 @@ export default function ContactPage() {
             </ul>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-3">
-            {quickFacts.map((item) => (
-              <div key={item.label} className="journal-card px-4 py-5 text-center">
-                <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">{item.label}</p>
-                <p className="mt-2 text-lg font-semibold text-slate-950">{item.value}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="rounded-[1.25rem] border border-indigo-200/60 bg-gradient-to-br from-indigo-50/80 via-white to-sky-50/40 p-6 sm:flex sm:items-center sm:justify-between sm:gap-6">
-            <div className="flex items-start gap-3">
-              <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-indigo-600" aria-hidden />
-              <div>
-                <p className="font-semibold text-slate-950">Prefer mail?</p>
-                <p className="mt-1 text-sm text-slate-600">
-                  Editorial:{' '}
-                  <a href={`mailto:hello@${SITE_CONFIG.domain}`} className="font-medium text-indigo-700 underline-offset-2 hover:underline">
-                    {`hello@${SITE_CONFIG.domain}`}
-                  </a>
-                </p>
-              </div>
-            </div>
-            <Button variant="outline" className="mt-4 w-full shrink-0 rounded-full border-white/80 bg-white/90 sm:mt-0 sm:w-auto" asChild>
-              <a href={`mailto:hello@${SITE_CONFIG.domain}`} className="inline-flex items-center gap-2">
-                <Mail className="h-4 w-4" />
-                Open email
-              </a>
-            </Button>
-          </div>
         </div>
 
         <div className="lg:sticky lg:top-28">

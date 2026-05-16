@@ -24,6 +24,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet" />
       </head>
       <body
+        suppressHydrationWarning
         data-site-shell={recipe.homeLayout}
         data-motion-pack={recipe.motionPack}
         className={`${brandPack.bodyClassName} ${brandPack.fontClassName} ${brandPack.paletteClassName}`}

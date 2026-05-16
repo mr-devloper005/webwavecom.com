@@ -241,7 +241,6 @@ export function TaskPostCard({
                 </div>
                 <div className="min-w-0">
                   <p className="truncate font-semibold text-slate-900 text-sm">{post.authorName || 'Editorial Team'}</p>
-                  <p className="text-xs text-slate-500">{post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'Recent'}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">

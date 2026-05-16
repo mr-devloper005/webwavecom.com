@@ -64,8 +64,6 @@ export default function BlogPage() {
             <article key={post.id} className="journal-card p-6 sm:p-8">
               <div className="flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-wide text-indigo-600">
                 <span>{post.tag}</span>
-                <span className="text-slate-400">·</span>
-                <span className="text-slate-500">{post.date}</span>
               </div>
               <h2 className="mt-3 text-2xl font-semibold tracking-tight text-slate-950">{post.title}</h2>
               <p className="mt-3 text-sm leading-relaxed text-slate-600 sm:text-base">{post.excerpt}</p>
